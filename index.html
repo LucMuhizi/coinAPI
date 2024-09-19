@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crypto Performance Tracker</title>
+    <!-- Basic styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .crypto-list {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .crypto-section {
+            width: 45%;
+            margin: 20px 0;
+        }
+        .crypto-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .crypto-section li {
+            background: #f9f9f9;
+            margin: 8px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .crypto-section li.negative {
+            color: red;
+        }
+        .crypto-section li.positive {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Crypto Performance Tracker</h1>
+    <h2>Top 5 Best and Worst Performing Cryptocurrencies in the Last 24 Hours</h2>
+
+    <div class="crypto-list">
+        <div class="crypto-section" id="worst-performers">
+            <h3>Worst Performers</h3>
+            <ul id="worst-list"></ul>
+        </div>
+        <div class="crypto-section" id="best-performers">
+            <h3>Best Performers</h3>
+            <ul id="best-list"></ul>
+        </div>
+    </div>
+
+    <!-- Include the script -->
+    <script src="script.js"></script>
+</body>
+</html>
