@@ -24,9 +24,20 @@ let eventListenerAdded = false;
 
 // Function to fetch data and update the UI
 function fetchDataAndUpdateUI() {
+    // Show the loading indicator
+    const loadingIndicator = document.getElementById('loading-indicator');
+    loadingIndicator.style.display = 'block';
+
+    // Clear any previous error messages
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = '';
+
     fetch(`${API_URL}?${queryString}`)
         .then(response => response.json())
         .then(data => {
+            // Hide the loading indicator
+            loadingIndicator.style.display = 'none';
+
             // Update the global cryptoData variable
             cryptoData = data;
 
@@ -47,9 +58,10 @@ function fetchDataAndUpdateUI() {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            const errorMessage = document.createElement('p');
+            // Hide the loading indicator
+            loadingIndicator.style.display = 'none';
+            // Display error message
             errorMessage.textContent = 'An error occurred while fetching data. Please try again later.';
-            document.body.appendChild(errorMessage);
         });
 }
 
@@ -116,12 +128,25 @@ function showChart(crypto) {
     modal.style.display = 'flex';
     chartTitle.textContent = `${crypto.name} Price Chart`;
 
+    // Clear previous error messages and chart
+    const modalErrorMessage = document.getElementById('modal-error-message');
+    modalErrorMessage.textContent = '';
+    const ctx = document.getElementById('price-chart').getContext('2d');
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    // Show the modal loading indicator
+    const modalLoadingIndicator = document.getElementById('modal-loading-indicator');
+    modalLoadingIndicator.style.display = 'block';
+
     // Fetch historical data
-    fetchHistoricalData(crypto);
+    fetchHistoricalData(crypto, modalLoadingIndicator, modalErrorMessage);
 }
 
 // Function to fetch historical data from CoinGecko API
-function fetchHistoricalData(crypto) {
+function fetchHistoricalData(crypto, modalLoadingIndicator, modalErrorMessage) {
     console.log('Fetching historical data for:', crypto.id);
     const days = 30; // Number of days of historical data
     const apiUrl = `https://api.coingecko.com/api/v3/coins/${crypto.id}/market_chart?vs_currency=usd&days=${days}`;
@@ -135,6 +160,9 @@ function fetchHistoricalData(crypto) {
             return response.json();
         })
         .then(data => {
+            // Hide the modal loading indicator
+            modalLoadingIndicator.style.display = 'none';
+
             if (!data.prices || data.prices.length === 0) {
                 throw new Error('No historical price data available.');
             }
@@ -153,10 +181,10 @@ function fetchHistoricalData(crypto) {
         })
         .catch(error => {
             console.error('Error fetching historical data:', error);
-            alert(`Unable to fetch historical data: ${error.message}`);
-            // Close the modal
-            const modal = document.getElementById('chart-modal');
-            modal.style.display = 'none';
+            // Hide the modal loading indicator
+            modalLoadingIndicator.style.display = 'none';
+            // Display error message
+            modalErrorMessage.textContent = `Unable to fetch historical data: ${error.message}`;
         });
 }
 

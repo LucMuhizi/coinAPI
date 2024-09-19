@@ -5,8 +5,11 @@
     <title>Crypto Performance Tracker</title>
     <!-- Include Chart.js from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include Loaders.css from CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/loaders.css/0.1.2/loaders.min.css">
     <!-- Basic styling -->
     <style>
+        /* Existing styles */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -88,12 +91,58 @@
             max-width: 100%;
             height: auto;
         }
+        /* Loading Indicator Styles */
+        .loading-indicator {
+            display: none; /* Hidden by default */
+            text-align: center;
+            margin-top: 20px;
+        }
+        .loader,
+        .loader:after {
+            border-radius: 50%;
+            width: 2.5em;
+            height: 2.5em;
+        }
+        .loader {
+            font-size: 10px;
+            position: relative;
+            text-indent: -9999em;
+            border-top: 0.3em solid rgba(0, 0, 0, 0.2);
+            border-right: 0.3em solid rgba(0, 0, 0, 0.2);
+            border-bottom: 0.3em solid rgba(0, 0, 0, 0.2);
+            border-left: 0.3em solid #3498db;
+            transform: translateZ(0);
+            animation: load8 1.1s infinite linear;
+            margin: 0 auto;
+        }
+        @keyframes load8 {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        /* Error Message Styles */
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
     <h1>Crypto Performance Tracker</h1>
     <h2>Top 5 Best and Worst Performing Cryptocurrencies in the Last 24 Hours</h2>
+
+    <!-- Loading Indicator -->
+    <div id="loading-indicator" class="loading-indicator">
+        <div class="loader">Loading...</div>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" class="error-message"></div>
 
     <div class="search-container">
         <input type="text" id="search-input" placeholder="Search for a cryptocurrency..." />
@@ -117,7 +166,13 @@
         <div class="modal-content">
             <span id="close-modal" class="close-button">&times;</span>
             <h3 id="chart-title"></h3>
+            <!-- Modal Loading Indicator -->
+            <div id="modal-loading-indicator" class="loading-indicator">
+                <div class="loader">Loading...</div>
+            </div>
             <canvas id="price-chart"></canvas>
+            <!-- Modal Error Message -->
+            <div id="modal-error-message" class="error-message"></div>
         </div>
     </div>
 
